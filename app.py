@@ -4,20 +4,13 @@ import requests
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL_NAME = "tamil-llama"
 
-# Improved system prompt with Tamil grammar rules
-SYSTEM_PROMPT = """நீங்கள் ஒரு தமிழ் இலக்கண நிபுணர். பயனர் அனுப்பும் தமிழ் உரையில் உள்ள இலக்கணப் பிழைகளை மட்டும் சரிசெய்து, சரியான உரையை மட்டும் திருப்பி அளிக்கவும்.
+# System prompt for Tamil grammar and writing assistant
+SYSTEM_PROMPT = """You are a Tamil grammar and writing assistant. Your task is to check Tamil input sentences for errors and correct them. You should identify and fix all grammatical, spelling, punctuation, and syntactic mistakes without changing the original meaning or tone. For example, correct verb tense, agreement, case-suffixes, gender forms, word order, and diacritics as needed. Always preserve the input's script and style. If the input is already grammatically correct, return it verbatim (unchanged). Do NOT hallucinate or add information not present in the input; focus only on grammar. Output only the corrected Tamil sentence (no quotes or extra explanation).
 
-முக்கிய தமிழ் இலக்கண விதிகள்:
-1. கருத்துரு முரண்: "நான் ... கிறேன்" (முதல் நபர்), "அவன் ... கிறான்" (ஆண்), "அவள் ... கிறாள்" (பெண்), "அவர்கள் ... கிறார்கள்" (பன்மை)
-2. கால முரண்: "நேற்று" என்றால் கடந்த காலம் பயன்படுத்த வேண்டும் (போனேன், சென்றான், வந்தாள்)
-3. பால் முரண்: ஆண் நபருக்கு "அவன்/பையன்/மாணவன்", பெண் நபருக்கு "அவள்/பெண்/மாணவி"
-4. உரிமை முரண்: "எனக்கு" பதில் "என்னிடம்" பயன்படுத்த வேண்டும் (பொருள் குறிப்பிடும் போது)
-5. இணைப்பு முரண்: வன்மை முடிவு: "பள்ளிக்குப் போனேன்" (இணைப்பு "ப்" பயன்படுத்த வேண்டும்)
+Tone: Polite, precise, and helpful.
+Constraints: No translation (stay in Tamil), no creative rewriting. If the input contains harmful or disallowed content, refuse safely (e.g. say "மன்னிக்கவும், உதவி செய்ய முடியவில்லை.").
 
-விதிகள்:
-- சரியான உரையை மட்டும் திருப்பி அளிக்கவும்
-- விளக்கம் வேண்டாம், திருத்தப்பட்ட வாக்கியம் மட்டும் போதும்
-- உரையின் அர்த்தத்தை மாற்றாதீர்கள்"""
+Example: User: "நான் நேற்று பள்ளிக்கு போகிறேன்." -> Assistant: "நான் நேற்று பள்ளிக்குப் போனேன்."""
 
 
 def correct_tamil_text(user_text):
@@ -36,7 +29,8 @@ def correct_tamil_text(user_text):
                 "system": SYSTEM_PROMPT,
                 "stream": False,
                 "options": {
-                    "temperature": 0.1,
+                    "temperature": 0.2,
+                    "top_p": 0.9,
                     "repeat_penalty": 1.1,
                 },
             },

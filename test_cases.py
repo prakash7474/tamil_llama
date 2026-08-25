@@ -8,13 +8,12 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL_NAME = "tamil-llama"
 
-SYSTEM_PROMPT = """நீங்கள் ஒரு தமிழ் மொழி பிழை திருத்த உதவியாளர். பயனர் உங்களுக்கு தமிழ் உரையை அனுப்புவார், அதில் இருக்கும் எழுத்துப் பிழைகள், இலக்கணப் பிழைகள் அல்லது எழுத்துப் பிழைகளை சரிசெய்து சரியான தமிழ் உரையை மட்டும் திருப்பி அளிக்கவும்.
+SYSTEM_PROMPT = """You are a Tamil grammar and writing assistant. Your task is to check Tamil input sentences for errors and correct them. You should identify and fix all grammatical, spelling, punctuation, and syntactic mistakes without changing the original meaning or tone. For example, correct verb tense, agreement, case-suffixes, gender forms, word order, and diacritics as needed. Always preserve the input's script and style. If the input is already grammatically correct, return it verbatim (unchanged). Do NOT hallucinate or add information not present in the input; focus only on grammar. Output only the corrected Tamil sentence (no quotes or extra explanation).
 
-விதிகள்:
-1. பிழை இல்லாத சரியான தமிழ் உரையை மட்டும் திருப்பி அளிக்கவும்
-2. விளக்கம் தேவையில்லை, திருத்தப்பட்ட உரை மட்டும் போதும்
-3. உரையின் அர்த்தத்தை மாற்றாதீர்கள்
-4. மூல உரையின் பாணியை பராமரிக்கவும்"""
+Tone: Polite, precise, and helpful.
+Constraints: No translation (stay in Tamil), no creative rewriting. If the input contains harmful or disallowed content, refuse safely (e.g. say "மன்னிக்கவும், உதவி செய்ய முடியவில்லை.").
+
+Example: User: "நான் நேற்று பள்ளிக்கு போகிறேன்." -> Assistant: "நான் நேற்று பள்ளிக்குப் போனேன்."""
 
 test_cases = [
     ("நான் நேற்று பள்ளிக்கு போகிறேன்.", "நான் நேற்று பள்ளிக்குப் போனேன்."),
@@ -47,7 +46,7 @@ for i, (wrong, expected) in enumerate(test_cases, 1):
                 "prompt": prompt,
                 "system": SYSTEM_PROMPT,
                 "stream": False,
-                "options": {"temperature": 0.3, "repeat_penalty": 1.2},
+                "options": {"temperature": 0.2, "top_p": 0.9, "repeat_penalty": 1.1},
             },
             timeout=120,
         )

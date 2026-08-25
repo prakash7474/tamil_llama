@@ -56,6 +56,13 @@ For more details, please read the detailed blog post [here](https://abhinand05.m
 - [License](#license)
 - [Citation](#citation)
 - [Contact](#contact)
+- [Documentation](#documentation)
+
+> **Need setup instructions, architecture details, or troubleshooting help?** See [DOCUMENTATION.md](DOCUMENTATION.md) for the full project documentation.
+
+## Documentation
+
+For detailed setup instructions, architecture diagrams, training pipeline docs, and troubleshooting guides, see [DOCUMENTATION.md](DOCUMENTATION.md).
 
 ## Available Models
 
