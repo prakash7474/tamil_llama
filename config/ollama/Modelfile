@@ -1,4 +1,4 @@
-FROM ./tamil-llama.gguf
+FROM llama3.2:latest
 
 TEMPLATE """{{- if .First }}{{ .System }}{{- end }}
 
